@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Island Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="user-info">
+            <h2>Welcome, <span id="playerName">Loading...</span></h2>
+            <p>Island: <span id="playerIsland">-</span> | Rank: <span id="playerRole">-</span></p>
+        </div>
+        <div class="wallet">
+            <h3>💰 <span id="playerBalance">0</span> La7alee7</h3>
+        </div>
+        <button id="logoutBtn">Abandon Ship</button>
+    </nav>
+
+    <!-- Main Game Area -->
+    <main class="dashboard-grid">
+        
+        <!-- Zone 1: Daily Tracker -->
+        <section class="card" id="trackerSection">
+            <h2>📜 Daily Log</h2>
+            <p>Submit your progress to earn tokens.</p>
+<div id="trackerContainer">
+                <form id="trackerForm">
+                    <label for="trackDate">Select Date:</label>
+                    <input type="date" id="trackDate" required>
+                    
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="checkPrayers"> Completed Daily Prayers</label>
+                        <label><input type="checkbox" id="checkMass"> Attended Mass</label>
+                        <label><input type="checkbox" id="checkChurch"> Attended Church Meeting</label>
+                    </div>
+                    
+                    <button type="submit" id="trackerSubmitBtn">Submit Log</button>
+                    <p id="trackerMessage"></p>
+                </form>
+            </div>
+        </section>
+
+        <!-- Zone 2: The Market -->
+        <section class="card" id="marketSection">
+            <h2>⚓ The Port Market</h2>
+            <p>Spend your personal wealth on raw materials.</p>
+            <div id="marketContainer">
+                <!-- We will generate the shop items here later -->
+                <p>Market is currently closed.</p>
+            </div>
+        </section>
+
+        <!-- Zone 3: The Shipyard -->
+        <section class="card" id="shipyardSection">
+            <h2>🔨 Tali3a Shipyard</h2>
+            <p>Combine resources to build your ship.</p>
+            <div id="shipyardContainer">
+                <!-- We will show the ship progress here later -->
+                <p>Awaiting Master blueprints.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

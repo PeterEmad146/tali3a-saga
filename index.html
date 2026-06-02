@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scout Island Survival</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Scout Island</h1>
+        <p>Enter your secret passcode to set sail.</p>
+        
+        <input type="text" id="passcodeInput" placeholder="Enter Passcode..." autocomplete="off">
+        <button id="loginBtn">Set Sail</button>
+        
+        <!-- This paragraph will display errors if the passcode is wrong -->
+        <p id="errorMessage" style="color: red; display: none;"></p>
+    </div>
+
+    <!-- Link the logic script at the bottom so it loads after the UI -->
+    <script src="app.js"></script>
+</body>
+</html>

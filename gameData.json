@@ -1,0 +1,181 @@
+{
+  "gameEconomy": {
+    "currencyName": "La7alee7",
+    "rawMaterials": {
+      "mat_screw": {
+        "name": "Steel Screws",
+        "description": "Basic fasteners needed for almost everything.",
+        "cost": 10,
+        "category": "Metal"
+      },
+      "mat_nail": {
+        "name": "Copper Nails",
+        "description": "Resistant to saltwater rust, used for exterior parts.",
+        "cost": 15,
+        "category": "Metal"
+      },
+      "mat_plank": {
+        "name": "Pine Planks",
+        "description": "Lightweight wood for decking and details.",
+        "cost": 30,
+        "category": "Wood"
+      },
+      "mat_tar": {
+        "name": "Pitch Tar",
+        "description": "Sticky substance for waterproofing the hull.",
+        "cost": 40,
+        "category": "Misc"
+      },
+      "mat_rope": {
+        "name": "Hemp Rope",
+        "description": "Thick ropes for rigging and securing sails.",
+        "cost": 50,
+        "category": "Fabric"
+      },
+      "mat_log": {
+        "name": "Oak Logs",
+        "description": "Heavy, sturdy wood for the ship's core skeleton.",
+        "cost": 100,
+        "category": "Wood"
+      },
+      "mat_canvas": {
+        "name": "Canvas Cloth",
+        "description": "Heavy duty fabric to catch the wind.",
+        "cost": 120,
+        "category": "Fabric"
+      },
+      "mat_iron": {
+        "name": "Iron Ingots",
+        "description": "Solid metal blocks for heavy machinery and anchors.",
+        "cost": 200,
+        "category": "Metal"
+      },
+      "mat_glass": {
+        "name": "Glass Lenses",
+        "description": "Fragile but essential for navigation tools.",
+        "cost": 300,
+        "category": "Misc"
+      }
+    },
+    
+    "shipParts": {
+      "part_01_keel": {
+        "name": "The Keel",
+        "description": "The backbone of the ship. Must be built first.",
+        "dependency": null,
+        "recipe": {
+          "mat_log": 12,
+          "mat_iron": 6,
+          "mat_screw": 60
+        }
+      },
+      "part_02_hull": {
+        "name": "The Hull",
+        "description": "The watertight body of the ship.",
+        "dependency": "part_01_keel",
+        "recipe": {
+          "mat_plank": 24,
+          "mat_tar": 12,
+          "mat_nail": 60,
+          "mat_screw": 60
+        }
+      },
+      "part_03_deck": {
+        "name": "The Main Deck",
+        "description": "Where the crew stands and fights.",
+        "dependency": "part_02_hull",
+        "recipe": {
+          "mat_plank": 30,
+          "mat_nail": 48,
+          "mat_tar": 12
+        }
+      },
+      "part_04_mast": {
+        "name": "The Mainmast",
+        "description": "The tall wooden pole that holds the sails.",
+        "dependency": "part_03_deck",
+        "recipe": {
+          "mat_log": 6,
+          "mat_iron": 4,
+          "mat_rope": 12
+        }
+      },
+      "part_05_rigging": {
+        "name": "The Rigging",
+        "description": "The complex web of ropes holding the mast secure.",
+        "dependency": "part_04_mast",
+        "recipe": {
+          "mat_rope": 35,
+          "mat_iron": 6
+        }
+      },
+      "part_06_sails": {
+        "name": "Canvas Sails",
+        "description": "Catches the bountiful winds.",
+        "dependency": "part_05_rigging",
+        "recipe": {
+          "mat_canvas": 18,
+          "mat_rope": 12,
+          "mat_nail": 25
+        }
+      },
+      "part_07_rudder": {
+        "name": "The Rudder",
+        "description": "Steers the ship through treacherous waters.",
+        "dependency": "part_02_hull",
+        "recipe": {
+          "mat_log": 4,
+          "mat_iron": 3,
+          "mat_screw": 12
+        }
+      },
+      "part_08_anchor": {
+        "name": "Heavy Iron Anchor",
+        "description": "Keeps the ship from drifting during Hurricane Season.",
+        "dependency": "part_02_hull",
+        "recipe": {
+          "mat_iron": 12,
+          "mat_rope": 6
+        }
+      },
+      "part_09_crows_nest": {
+        "name": "Crow's Nest",
+        "description": "A lookout point high above the deck.",
+        "dependency": "part_04_mast",
+        "recipe": {
+          "mat_plank": 6,
+          "mat_glass": 3,
+          "mat_screw": 25
+        }
+      },
+      "part_10_cannons": {
+        "name": "Broadside Cannons",
+        "description": "Heavy artillery to defend against Pirate Raids.",
+        "dependency": "part_03_deck",
+        "recipe": {
+          "mat_iron": 14,
+          "mat_log": 6
+        }
+      },
+      "part_11_wheel": {
+        "name": "Captain's Wheel",
+        "description": "Connects to the rudder for precise steering.",
+        "dependency": "part_03_deck",
+        "recipe": {
+          "mat_log": 3,
+          "mat_iron": 2,
+          "mat_nail": 15
+        }
+      },
+      "part_12_compass": {
+        "name": "Golden Compass",
+        "description": "The final piece needed to navigate to the Leaders Island.",
+        "dependency": "part_11_wheel",
+        "recipe": {
+          "mat_iron": 2,
+          "mat_glass": 3
+        }
+      }
+    }
+  }
+}
