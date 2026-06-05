@@ -1,44 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Island Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Tali3a Saga — Island Dashboard</title>
+    <meta name="description"
+        content="Your Island command center. Track daily progress, trade resources, build your ship, and dominate the fleet.">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <!-- Top Navigation Bar -->
-    <nav class="top-nav">
-        <div class="user-info">
-            <h2>Welcome, <span id="playerName">Loading...</span></h2>
-            <p>Island: <span id="playerIsland">-</span> | Rank: <span id="playerRole">-</span></p>
+    <!-- Loading Overlay -->
+    <div id="globalLoader">
+        <div class="spinner"></div>
+        <p id="loaderText">Syncing with Server...</p>
+    </div>
+
+    <!-- Animated Ocean Waves -->
+    <div class="ocean-waves">
+        <div class="wave wave-1"></div>
+        <div class="wave wave-2"></div>
+        <div class="wave wave-3"></div>
+    </div>
+    <header>
+        <div>
+            <h1>Welcome, <span id="playerName"></span></h1>
+            <p style="font-size: 14px; opacity: 0.8;">Island: <span id="playerIsland"></span> | Rank: <span
+                    id="playerRole"></span></p>
         </div>
-        <div class="wallet">
-            <h3>💰 <span id="playerBalance">0</span> La7alee7</h3>
+        <div style="text-align: right;">
+            <p style="font-size: 20px; font-weight: bold; color: #f1c40f; margin: 0 0 5px 0;">
+                <img src="assets/coin.png" class="coin-icon" onerror="this.style.display='none'">
+                <span id="playerBalance">0</span> La7alee7
+            </p>
+            <button id="logoutBtn" style="background-color: #c0392b; padding: 5px 10px; font-size: 12px;">Abandon
+                Ship</button>
         </div>
-        <button id="logoutBtn">Abandon Ship</button>
-    </nav>
+    </header>
 
     <!-- Main Game Area -->
     <main class="dashboard-grid">
-        
+
+        <!-- Notification Center -->
+        <section class="card" id="notificationSection"
+            style="grid-column: span 3; background-color: #fff3cd; border: 2px solid #ffeeba; display: none;">
+            <h2 style="color: #856404;">📜 Royal Fleet Notifications</h2>
+            <div id="notificationContainer" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                <!-- Notifications will appear here -->
+            </div>
+        </section>
+
         <!-- Zone 1: Daily Tracker -->
         <section class="card" id="trackerSection">
             <h2>📜 Daily Log</h2>
             <p>Submit your progress to earn tokens.</p>
-<div id="trackerContainer">
+            <div id="trackerContainer" style="direction: rtl; text-align: right;">
                 <form id="trackerForm">
-                    <label for="trackDate">Select Date:</label>
-                    <input type="date" id="trackDate" required>
-                    
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" id="checkPrayers"> Completed Daily Prayers</label>
-                        <label><input type="checkbox" id="checkMass"> Attended Mass</label>
-                        <label><input type="checkbox" id="checkChurch"> Attended Church Meeting</label>
+                    <div style="margin-bottom: 15px;">
+                        <label for="trackDate" style="font-weight: bold; display: block; margin-bottom: 5px;">اختر
+                            اليوم:</label>
+                        <input type="date" id="trackDate" min="2026-06-01" required
+                            style="width: 100%; padding: 8px; box-sizing: border-box;">
                     </div>
-                    
-                    <button type="submit" id="trackerSubmitBtn">Submit Log</button>
-                    <p id="trackerMessage"></p>
+
+                    <div class="checkbox-group"
+                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                        <label><input type="checkbox" id="checkMorning"> صلاة الصبح </label>
+                        <label><input type="checkbox" id="checkNight"> صلاة بليل </label>
+                        <label><input type="checkbox" id="checkTeam"> صلاة مع الفريق </label>
+                        <label><input type="checkbox" id="checkBible"> الكتاب المقدس </label>
+                        <label><input type="checkbox" id="checkTasbeha"> تسبحة </label>
+                        <label><input type="checkbox" id="checkMass"> قداس </label>
+                        <label><input type="checkbox" id="checkSundaySchool"> مدارس أحد </label>
+                        <label><input type="checkbox" id="checkKhoros"> خورس </label>
+                    </div>
+
+                    <button type="submit" id="trackerSubmitBtn"
+                        style="width: 100%; padding: 10px; font-weight: bold;">تسجيل اليوم</button>
+                    <p id="trackerMessage" style="text-align: center; margin-top: 10px; font-weight: bold;"></p>
                 </form>
             </div>
         </section>
@@ -48,8 +88,7 @@
             <h2>⚓ The Port Market</h2>
             <p>Spend your personal wealth on raw materials.</p>
             <div id="marketContainer">
-                <!-- We will generate the shop items here later -->
-                <p>Market is currently closed.</p>
+                <!-- Market cards spawn here via JS -->
             </div>
         </section>
 
@@ -63,8 +102,141 @@
             </div>
         </section>
 
+        <!-- Zone 4: The Black Market (Tactical Items) -->
+        <section class="card" id="blackMarketSection" style="grid-column: span 3;">
+            <h2>🕵️ The Black Market</h2>
+            <p>Purchase advanced tactical weapons and defenses using both La7alee7 and Raw Materials.</p>
+            <div id="blackMarketContainer"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 15px;">
+                <!-- Tactical items will spawn here -->
+            </div>
+        </section>
+
+        <!-- Zone 5: Tactical Map (Combat & Defenses) -->
+        <section class="card" id="tacticalSection" style="grid-column: span 3;">
+            <h2>⚔️ Tactical Map & Defenses</h2>
+            <p>Deploy shields or launch raids. <b>Note: You can only activate ONE defense and launch ONE attack every 7
+                    days.</b></p>
+
+            <div class="tactical-grid">
+                <!-- Left Side: Shield Room -->
+                <div style="border: 1px dashed #ccc; padding: 15px; border-radius: 5px; text-align: center;">
+                    <h3>🛡️ Active Defense System</h3>
+                    <p>Current Shield: <span id="currentShield"
+                            style="font-weight: bold; color: blue;">Loading...</span></p>
+                    <p id="defenseCooldownText" style="color: red; font-size: 12px; font-weight: bold;"></p>
+                    <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+
+                    <h4>Deploy Defenses from your Arsenal:</h4>
+                    <div id="defenseActionContainer"
+                        style="display: flex; justify-content: space-around; margin-top: 10px; flex-wrap: wrap; gap: 10px;">
+                        <!-- Defense buttons will spawn here -->
+                    </div>
+                </div>
+
+                <!-- Right Side: War Room -->
+                <div style="border: 1px dashed #ccc; padding: 15px; border-radius: 5px;">
+                    <h3 style="text-align: center;">🏴‍☠️ Launch Offensive Raid</h3>
+                    <p id="attackCooldownText"
+                        style="text-align: center; color: red; font-size: 12px; font-weight: bold;"></p>
+
+                    <form id="combatForm">
+                        <label for="targetSelect" style="font-weight: bold; display: block; margin-bottom: 5px;">Target
+                            Island:</label>
+                        <select id="targetSelect" required style="width: 100%; padding: 8px; margin-bottom: 15px;">
+                            <option value="">-- Loading Targets --</option>
+                        </select>
+
+                        <label for="weaponSelect" style="font-weight: bold; display: block; margin-bottom: 5px;">Select
+                            Weapon from Arsenal:</label>
+                        <select id="weaponSelect" required style="width: 100%; padding: 8px; margin-bottom: 15px;">
+                            <option value="">-- Loading Arsenal --</option>
+                        </select>
+
+                        <button type="submit" id="raidSubmitBtn"
+                            style="width: 100%; padding: 10px; background-color: #dc3545; color: white; font-weight: bold; border: none; cursor: pointer; border-radius: 4px;">Submit
+                            Raid for Leader Approval</button>
+                    </form>
+                    <p id="combatMessage" style="text-align: center; font-weight: bold; margin-top: 10px;"></p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Tax & Transfer Port (Crew Only) -->
+        <section class="card" id="bankSection" style="grid-column: span 3; display: none;">
+            <h2>🏦 Island Treasury Transfer</h2>
+            <p>Send La7alee7 to your Island Master to help fund large purchases. <b>(10% Imperial Tax applied to all
+                    transfers)</b></p>
+            <div
+                style="background: #f4f4f4; padding: 15px; border-radius: 5px; display: flex; gap: 10px; align-items: center;">
+                <input type="number" id="transferAmount" placeholder="Amount to send..." min="1"
+                    style="padding: 8px; flex-grow: 1;">
+                <button onclick="submitTransfer()"
+                    style="background-color: gold; color: white; font-weight: bold; border: 1px solid #ccc; padding: 8px 15px; cursor: pointer;">Send
+                    to Master</button>
+            </div>
+            <p id="transferMsg" style="font-size: 12px; margin-top: 5px; font-weight: bold;"></p>
+        </section> 
+
+        <!-- Zone 6: Player Trading Port -->
+        <section class="card" id="tradePortSection" style="grid-column: span 3;">
+            <h2>🤝 Global Trading Port</h2>
+            <p>Buy and sell materials with other Islands. <b>(Only Masters can create or accept trades)</b></p>
+
+            <!-- Create Trade UI (Master Only) -->
+            <div id="createTradePanel"
+                style="border: 1px dashed #ccc; padding: 15px; border-radius: 5px; margin-bottom: 20px; display: none;">
+                <h4>🚢 Post a New Trade Offer</h4>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
+                    <div>
+                        <label style="font-size: 12px; font-weight: bold;">I am Offering:</label><br>
+                        <select id="offerMatSelect" style="padding: 5px;"></select>
+                        <input type="number" id="offerQty" placeholder="Qty" min="1" style="padding: 5px; width: 60px;">
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; font-weight: bold;">I want in Return:</label><br>
+                        <select id="reqMatSelect" style="padding: 5px;">
+                            <option value="None">No Materials Needed</option>
+                        </select>
+                        <input type="number" id="reqQty" placeholder="Qty" min="0" value="0"
+                            style="padding: 5px; width: 60px;">
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; font-weight: bold;">AND / OR La7alee7:</label><br>
+                        <input type="number" id="reqTokens" placeholder="Tokens" min="0" value="0"
+                            style="padding: 5px; width: 80px;">
+                    </div>
+                    <button onclick="createTrade()"
+                        style="background-color: #28a745; color: white; border: none; padding: 8px 15px; font-weight: bold; cursor: pointer; border-radius: 3px;">Post
+                        Offer</button>
+                </div>
+            </div>
+
+            <!-- Active Global Trades Board -->
+            <h4>📋 Active Market Offers</h4>
+            <div id="globalTradesContainer"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
+                <!-- Trades spawn here -->
+            </div>
+        </section>
+
+        <!-- Zone 7: Global Fleet Rankings -->
+        <section class="card" id="leaderboardSection" style="grid-column: span 3;">
+            <h2>🏆 Global Fleet Rankings</h2>
+            <p>See how your Island stacks up against the rest of the fleet! <b>(1 Ship Part = 1,000 Pts | 1 La7alee7 = 1
+                    Pt)</b></p>
+            <div id="leaderboardContainer"
+                style="margin-top: 15px; background: #fff; border: 1px solid #ccc; border-radius: 5px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <p style="text-align: center; padding: 20px; color: gray;">Loading fleet data...</p>
+            </div>
+        </section>
+
     </main>
+
+
 
     <script src="app.js"></script>
 </body>
+
 </html>

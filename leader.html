@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Tali3a Saga — Fleet Command Portal</title>
+    <meta name="description"
+        content="Fleet Command Operations: Manage scouts, approve trackers, process raids, and broadcast fleet-wide notifications.">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="globalLoader">
+        <div class="spinner"></div>
+        <p id="loaderText">Executing Command...</p>
+    </div>
+
+    <!-- Animated Ocean Waves -->
+    <div class="ocean-waves">
+        <div class="wave wave-1"></div>
+        <div class="wave wave-2"></div>
+        <div class="wave wave-3"></div>
+    </div>
+
+    <div class="container" id="loginScreen">
+        <div class="card" style="max-width: 400px; margin: 100px auto; text-align: center;">
+            <h2>Fleet Command Login</h2>
+            <input type="text" id="leaderName" placeholder="Your Name (e.g. Leader Peter)" style="width: 90%;"><br>
+            <input type="password" id="leaderPasscode" placeholder="Master Passcode" style="width: 90%;"><br>
+            <button onclick="loginLeader()" style="width: 95%; margin-top: 15px;">Access Operations</button>
+        </div>
+    </div>
+
+    <div class="container" id="dashboardScreen" style="display: none;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>⚓ Fleet Command Operations</h1>
+            <p>Logged in as: <span id="displayLeaderName" style="color: #f1c40f; font-weight: bold; margin-right: 15px;"></span> 
+               <button onclick="logoutLeader()" style="background-color: #c0392b; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Logout</button>
+            </p>
+        </div>
+
+        <!-- Section 1: Trackers -->
+        <div class="card">
+            <h3>📋 Pending Daily Trackers</h3>
+            <div id="trackersContainer">Loading...</div>
+        </div>
+
+        <!-- Section 2: Combat Actions -->
+        <div class="card">
+            <h3>⚔️ Pending Combat Actions</h3>
+            <div id="actionsContainer">Loading...</div>
+        </div>
+
+        <!-- Section 3 & 4: Economy & Comms Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="card">
+                <h3>💰 Grant La7alee7</h3>
+                <select id="grantUserSelect" style="width: 100%;">
+                    <option>Loading...</option>
+                </select>
+                <input type="number" id="grantAmount" placeholder="Amount..." style="width: 95%;">
+                <input type="text" id="grantReason" placeholder="Reason (e.g. Helping clean up)..." style="width: 95%;">
+                <button onclick="grantTokens()" style="width: 100%; margin-top: 10px;">Mint & Transfer Funds</button>
+            </div>
+
+            <div class="card">
+                <h3>📜 Broadcast Notification</h3>
+                <select id="notifTargetSelect" style="width: 100%;">
+                    <option>Loading...</option>
+                </select>
+                <textarea id="notifMessage" placeholder="Type official message here..."
+                    style="width: 95%; height: 60px; padding: 10px; margin-top: 5px; border-radius: 4px;"></textarea>
+                <button onclick="sendNotif()" style="width: 100%; margin-top: 10px;">Dispatch Bird</button>
+            </div>
+
+            <!-- Section 5: Fleet Rankings & Crew Roster -->
+            <div class="card" style="margin-top: 20px;">
+                <h3>🏆 Fleet Rankings & Crew Roster</h3>
+                <p style="font-size: 12px; color: gray;">Click on any Island to expand and view the crew's individual wallets.</p>
+                <div id="leaderboardContainer">Loading rankings...</div>
+            </div>
+
+            <!-- Section 6: Scout Tracker Audit -->
+            <div class="card" style="margin-top: 20px;">
+                <h3>🔍 Scout Tracker Audit</h3>
+                <p style="font-size: 12px; color: gray;">Select a scout to view their complete daily submission history.</p>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <select id="auditUserSelect" style="flex-grow: 1; padding: 8px;">
+                        <option value="">-- Select Scout to View History --</option>
+                    </select>
+                    <button onclick="viewScoutHistory()" class="btn-green" style="padding: 8px 15px;">Load Records</button>
+                </div>
+                <div id="auditContainer" style="background: #fff; border-radius: 4px; overflow-x: auto;">
+                    <p style="padding: 10px; text-align: center; color: gray;">Select a scout and click "Load Records".</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // PASTE YOUR LIVE GOOGLE SCRIPT URL BELOW:
+        // ==========================================
+        const API_URL = "https://script.google.com/macros/s/AKfycbzzT26fDQZLHo-dFfNqrmVxVBBUHm-DoScUAkEObBS3SNsO0x7SjVA44TZtJeWS-oBSAw/exec";
+
+        // The shared password for all 14 leaders to access this page
+        const MASTER_PASSCODE = "CaptainBary";
+
+        let currentLeader = "";
+        let globalUsers = []; // Stores user data for the accordion menus
+
+        // Check if leader is already logged in when the page reloads
+        window.onload = function() {
+            const savedLeader = sessionStorage.getItem("leaderAuth");
+            if (savedLeader) {
+                currentLeader = savedLeader;
+                document.getElementById("loginScreen").style.display = "none";
+                document.getElementById("dashboardScreen").style.display = "block";
+                document.getElementById("displayLeaderName").innerText = currentLeader;
+                loadAdminData();
+            }
+        };
+
+        function loginLeader() {
+            const name = document.getElementById("leaderName").value.trim();
+            const pass = document.getElementById("leaderPasscode").value;
+            if (!name) return alert("Please enter your name for the logs.");
+            if (pass !== MASTER_PASSCODE) return alert("Access Denied. Incorrect Passcode.");
+
+            currentLeader = name;
+            sessionStorage.setItem("leaderAuth", currentLeader); // Save login session
+            
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("dashboardScreen").style.display = "block";
+            document.getElementById("displayLeaderName").innerText = currentLeader;
+            loadAdminData();
+        }
+
+        function logoutLeader() {
+            sessionStorage.removeItem("leaderAuth");
+            location.reload(); // Refresh page to return to login screen
+        }
+
+        function loadAdminData() {
+            showLoading("Fetching secure data...");
+            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "getLeaderData" }) })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        globalUsers = data.users; // Save users for the expandable roster
+                        renderTrackers(data.trackers);
+                        renderActions(data.actions);
+                        populateDropdowns(data.users, data.islands);
+                        
+                        // Immediately fetch the Leaderboard
+                        fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "getLeaderboard" }) })
+                        .then(r => r.json())
+                        .then(lData => {
+                            if(lData.status === "success") renderLeaderboard(lData.leaderboard);
+                            hideLoading();
+                        });
+                    }
+                });
+        }
+
+        function renderTrackers(trackers) {
+            const container = document.getElementById("trackersContainer");
+            if (trackers.length === 0) return container.innerHTML = "<p>No pending trackers.</p>";
+
+            let html = `<table><tr><th>Date</th><th>User ID</th><th>Log Details</th><th>Award Amount</th><th>Action</th></tr>`;
+            trackers.forEach(t => {
+                html += `
+                <tr>
+                    <td>${t.date}</td>
+                    <td style="font-weight:bold;">${t.userId}</td>
+                    <td style="font-size: 11px;">${t.details}</td>
+                    <td><input type="number" id="award_${t.row}" value="50" style="width: 60px; padding: 5px;"></td>
+                    <td><button class="btn-green" onclick="approveTracker(${t.row})">Approve</button></td>
+                </tr>
+            `;
+            });
+            container.innerHTML = html + "</table>";
+        }
+
+        function renderActions(actions) {
+            const container = document.getElementById("actionsContainer");
+            if (actions.length === 0) return container.innerHTML = "<p>No pending combat operations.</p>";
+
+            let html = `<table><tr><th>Date</th><th>Initiator</th><th>Target</th><th>Weapon Deployed</th><th>Command Decision</th></tr>`;
+            actions.forEach(a => {
+                html += `
+                <tr>
+                    <td>${a.date}</td>
+                    <td style="font-weight:bold; color: #c0392b;">${a.initiator}</td>
+                    <td style="font-weight:bold; color: #2980b9;">${a.target}</td>
+                    <td>${a.weapon}</td>
+                    <td>
+                        <button class="btn-green" onclick="processAction('${a.actionId}', 'Approved')">Approve</button>
+                        <button class="btn-red" onclick="processAction('${a.actionId}', 'Rejected')">Reject</button>
+                    </td>
+                </tr>
+            `;
+            });
+            container.innerHTML = html + "</table>";
+        }
+
+        function populateDropdowns(users, islands) {
+            const userSel = document.getElementById("grantUserSelect");
+            const auditSel = document.getElementById("auditUserSelect");
+            const islandSel = document.getElementById("notifTargetSelect");
+
+            userSel.innerHTML = `<option value="">-- Select Scout --</option>`;
+            auditSel.innerHTML = `<option value="">-- Select Scout --</option>`;
+            users.forEach(u => {
+                const opt = `<option value="${u.id}">${u.name} (${u.tali3a})</option>`;
+                userSel.innerHTML += opt;
+                auditSel.innerHTML += opt;
+            });
+
+            islandSel.innerHTML = `<option value="ALL">📢 ALL ISLANDS (Global Broadcast)</option>`;
+            islands.forEach(i => islandSel.innerHTML += `<option value="${i.id}">${i.name} (${i.id})</option>`);
+        }
+
+        // --- EXECUTION FUNCTIONS ---
+
+        function approveTracker(row) {
+            const amount = document.getElementById(`award_${row}`).value;
+            if (!confirm(`Award ${amount} La7alee7 to this tracker?`)) return;
+
+            fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "leaderProcessTracker", row: row, awardedTokens: amount, leaderName: currentLeader })
+            }).then(() => loadAdminData()); // Reload instantly
+        }
+
+        function processAction(actionId, decision) {
+            if (!confirm(`Are you sure you want to ${decision.toUpperCase()} this combat operation?`)) return;
+
+            fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "leaderProcessAction", actionId: actionId, decision: decision, leaderName: currentLeader })
+            }).then(() => loadAdminData());
+        }
+
+        function grantTokens() {
+            const user = document.getElementById("grantUserSelect").value;
+            const amount = document.getElementById("grantAmount").value;
+            const reason = document.getElementById("grantReason").value;
+
+            if (!user || !amount || !reason) return alert("Fill out all fields.");
+            if (!confirm(`Mint ${amount} La7alee7 for this scout?`)) return;
+
+            fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "leaderAddTokens", targetUserId: user, amount: amount, reason: reason, leaderName: currentLeader })
+            }).then(() => {
+                alert("Funds Transferred!");
+                document.getElementById("grantAmount").value = "";
+                document.getElementById("grantReason").value = "";
+            });
+        }
+
+        function sendNotif() {
+            const target = document.getElementById("notifTargetSelect").value;
+            const msg = document.getElementById("notifMessage").value;
+
+            if (!msg) return alert("Message cannot be empty.");
+            if (!confirm("Dispatch this official notification?")) return;
+
+            fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "leaderSendNotif", targetId: target, message: msg, leaderName: currentLeader })
+            }).then(() => {
+                alert("Message dispatched to the Fleet!");
+                document.getElementById("notifMessage").value = "";
+            });
+        }
+
+        // --- EXPANDABLE LEADERBOARD LOGIC ---
+        function renderLeaderboard(board) {
+            const container = document.getElementById("leaderboardContainer");
+            let html = `<table style="width: 100%; border-collapse: collapse;">
+                <tr><th>Rank</th><th>Island Name</th><th>Ship Parts</th><th>Total Wealth</th><th>Fleet Score</th></tr>`;
+            
+            board.forEach((team, index) => {
+                html += `
+                    <tr style="cursor: pointer; background-color: #fdfdfd; border-bottom: 2px solid #ccc;" onclick="toggleCrew('${team.id}')">
+                        <td>${index + 1}</td>
+                        <td style="font-weight:bold; color: #2980b9;">${team.name} (${team.id}) <span style="font-size:10px;">▼</span></td>
+                        <td>${team.parts} / 12</td>
+                        <td>💰 ${team.wealth}</td>
+                        <td style="color: purple; font-weight: bold;">${team.score}</td>
+                    </tr>
+                    <tr id="crew_row_${team.id}" style="display: none; background-color: #f4f6f9;">
+                        <td colspan="5" style="padding: 0;">
+                            <div style="padding: 10px 20px; border-left: 5px solid #2980b9;">
+                                <table style="width: 100%; font-size: 12px; margin: 0; background: transparent;">
+                                    <tr>
+                                        <th style="background: transparent; color: #f1c40f; padding: 5px;">Scout Name</th>
+                                        <th style="background: transparent; color: #f1c40f; padding: 5px;">Current Wallet</th>
+                                        <th style="background: transparent; color: #f1c40f; padding: 5px;">Lifetime Earned</th>
+                                    </tr>
+                                    ${generateCrewRows(team.id)}
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            container.innerHTML = html + "</table>";
+        }
+
+        function generateCrewRows(tali3aId) {
+            const crew = globalUsers.filter(u => u.tali3a === tali3aId);
+            if(crew.length === 0) return `<tr><td colspan="3">No crew members found.</td></tr>`;
+            return crew.map(c => `
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 5px;">${c.name}</td>
+                    <td style="padding: 5px; color: #856404; font-weight: bold;">💰 ${c.balance}</td>
+                    <td style="padding: 5px; color: #27ae60; font-weight: bold;">💎 ${c.lifetime}</td>
+                </tr>
+            `).join("");
+        }
+
+        function toggleCrew(tali3aId) {
+            const row = document.getElementById(`crew_row_${tali3aId}`);
+            row.style.display = (row.style.display === "none") ? "table-row" : "none";
+        }
+
+        // --- SCOUT TRACKER AUDIT LOGIC ---
+        function viewScoutHistory() {
+            const userId = document.getElementById("auditUserSelect").value;
+            if(!userId) return alert("Select a scout from the dropdown first.");
+            
+            showLoading("Accessing Imperial Archives...");
+            
+            fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "getScoutHistory", userId: userId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "success") renderAudit(data.history);
+                else document.getElementById("auditContainer").innerHTML = `<p style="color:red; text-align:center;">Error loading records.</p>`;
+                hideLoading();
+            })
+            .catch(() => hideLoading());
+        }
+
+        function renderAudit(history) {
+            const container = document.getElementById("auditContainer");
+            if(!history || history.length === 0) return container.innerHTML = "<p style='padding: 15px; text-align: center;'>No daily trackers submitted by this scout yet.</p>";
+            
+            let html = `
+            <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 12px; margin: 0;">
+                <tr style="background: #1b263b; color: white;">
+                    <th style="padding: 10px;">Date</th>
+                    <th>Morning</th><th>Night</th><th>Team</th><th>Bible</th>
+                    <th>Tasbeha</th><th>Mass</th><th>SunSch</th><th>Khoros</th>
+                    <th>Status</th><th>Coins</th>
+                </tr>
+            `;
+            
+            // Helper function to draw pretty checkmarks and dashes
+            const check = (val) => (val === true || String(val).toUpperCase() === "TRUE") ? "<span style='color:#27ae60; font-size:14px; font-weight:bold;'>✔</span>" : "<span style='color:#ccc;'>-</span>";
+            
+            history.forEach(h => {
+                const statusColor = h.status === "Pending" ? "#e67e22" : (h.status === "Updated" ? "#27ae60" : "#c0392b");
+                html += `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px; font-weight: bold; color: #2980b9;">${h.date}</td>
+                    <td>${check(h.m)}</td><td>${check(h.n)}</td><td>${check(h.team)}</td><td>${check(h.bible)}</td>
+                    <td>${check(h.tasbeha)}</td><td>${check(h.mass)}</td><td>${check(h.sun)}</td><td>${check(h.khoros)}</td>
+                    <td style="color: ${statusColor}; font-weight:bold;">${h.status}</td>
+                    <td style="font-weight: bold;">${h.awarded || 0}</td>
+                </tr>
+                `;
+            });
+            container.innerHTML = html + "</table>";
+        }
+
+        function showLoading(text) {
+            document.getElementById("loaderText").innerText = text;
+            document.getElementById("globalLoader").classList.add("active");
+        }
+        function hideLoading() {
+            document.getElementById("globalLoader").classList.remove("active");
+        }
+    </script>
+</body>
+
+</html>

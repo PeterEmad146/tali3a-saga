@@ -2,180 +2,36 @@
   "gameEconomy": {
     "currencyName": "La7alee7",
     "rawMaterials": {
-      "mat_screw": {
-        "name": "Steel Screws",
-        "description": "Basic fasteners needed for almost everything.",
-        "cost": 10,
-        "category": "Metal"
-      },
-      "mat_nail": {
-        "name": "Copper Nails",
-        "description": "Resistant to saltwater rust, used for exterior parts.",
-        "cost": 15,
-        "category": "Metal"
-      },
-      "mat_plank": {
-        "name": "Pine Planks",
-        "description": "Lightweight wood for decking and details.",
-        "cost": 30,
-        "category": "Wood"
-      },
-      "mat_tar": {
-        "name": "Pitch Tar",
-        "description": "Sticky substance for waterproofing the hull.",
-        "cost": 40,
-        "category": "Misc"
-      },
-      "mat_rope": {
-        "name": "Hemp Rope",
-        "description": "Thick ropes for rigging and securing sails.",
-        "cost": 50,
-        "category": "Fabric"
-      },
-      "mat_log": {
-        "name": "Oak Logs",
-        "description": "Heavy, sturdy wood for the ship's core skeleton.",
-        "cost": 100,
-        "category": "Wood"
-      },
-      "mat_canvas": {
-        "name": "Canvas Cloth",
-        "description": "Heavy duty fabric to catch the wind.",
-        "cost": 120,
-        "category": "Fabric"
-      },
-      "mat_iron": {
-        "name": "Iron Ingots",
-        "description": "Solid metal blocks for heavy machinery and anchors.",
-        "cost": 200,
-        "category": "Metal"
-      },
-      "mat_glass": {
-        "name": "Glass Lenses",
-        "description": "Fragile but essential for navigation tools.",
-        "cost": 300,
-        "category": "Misc"
-      }
+      "mat_screw": { "name": "Steel Screws", "description": "Basic fasteners.", "cost": 10, "category": "Metal" },
+      "mat_nail": { "name": "Copper Nails", "description": "Rust resistant.", "cost": 15, "category": "Metal" },
+      "mat_plank": { "name": "Pine Planks", "description": "Lightweight wood.", "cost": 30, "category": "Wood" },
+      "mat_tar": { "name": "Pitch Tar", "description": "Waterproofing.", "cost": 40, "category": "Misc" },
+      "mat_rope": { "name": "Hemp Rope", "description": "Rigging rope.", "cost": 50, "category": "Fabric" },
+      "mat_log": { "name": "Oak Logs", "description": "Sturdy skeleton.", "cost": 100, "category": "Wood" },
+      "mat_canvas": { "name": "Canvas Cloth", "description": "Heavy fabric.", "cost": 120, "category": "Fabric" },
+      "mat_iron": { "name": "Iron Ingots", "description": "Solid metal.", "cost": 200, "category": "Metal" },
+      "mat_glass": { "name": "Glass Lenses", "description": "Navigation.", "cost": 300, "category": "Misc" }
     },
-    
     "shipParts": {
-      "part_01_keel": {
-        "name": "The Keel",
-        "description": "The backbone of the ship. Must be built first.",
-        "dependency": null,
-        "recipe": {
-          "mat_log": 12,
-          "mat_iron": 6,
-          "mat_screw": 60
-        }
-      },
-      "part_02_hull": {
-        "name": "The Hull",
-        "description": "The watertight body of the ship.",
-        "dependency": "part_01_keel",
-        "recipe": {
-          "mat_plank": 24,
-          "mat_tar": 12,
-          "mat_nail": 60,
-          "mat_screw": 60
-        }
-      },
-      "part_03_deck": {
-        "name": "The Main Deck",
-        "description": "Where the crew stands and fights.",
-        "dependency": "part_02_hull",
-        "recipe": {
-          "mat_plank": 30,
-          "mat_nail": 48,
-          "mat_tar": 12
-        }
-      },
-      "part_04_mast": {
-        "name": "The Mainmast",
-        "description": "The tall wooden pole that holds the sails.",
-        "dependency": "part_03_deck",
-        "recipe": {
-          "mat_log": 6,
-          "mat_iron": 4,
-          "mat_rope": 12
-        }
-      },
-      "part_05_rigging": {
-        "name": "The Rigging",
-        "description": "The complex web of ropes holding the mast secure.",
-        "dependency": "part_04_mast",
-        "recipe": {
-          "mat_rope": 35,
-          "mat_iron": 6
-        }
-      },
-      "part_06_sails": {
-        "name": "Canvas Sails",
-        "description": "Catches the bountiful winds.",
-        "dependency": "part_05_rigging",
-        "recipe": {
-          "mat_canvas": 18,
-          "mat_rope": 12,
-          "mat_nail": 25
-        }
-      },
-      "part_07_rudder": {
-        "name": "The Rudder",
-        "description": "Steers the ship through treacherous waters.",
-        "dependency": "part_02_hull",
-        "recipe": {
-          "mat_log": 4,
-          "mat_iron": 3,
-          "mat_screw": 12
-        }
-      },
-      "part_08_anchor": {
-        "name": "Heavy Iron Anchor",
-        "description": "Keeps the ship from drifting during Hurricane Season.",
-        "dependency": "part_02_hull",
-        "recipe": {
-          "mat_iron": 12,
-          "mat_rope": 6
-        }
-      },
-      "part_09_crows_nest": {
-        "name": "Crow's Nest",
-        "description": "A lookout point high above the deck.",
-        "dependency": "part_04_mast",
-        "recipe": {
-          "mat_plank": 6,
-          "mat_glass": 3,
-          "mat_screw": 25
-        }
-      },
-      "part_10_cannons": {
-        "name": "Broadside Cannons",
-        "description": "Heavy artillery to defend against Pirate Raids.",
-        "dependency": "part_03_deck",
-        "recipe": {
-          "mat_iron": 14,
-          "mat_log": 6
-        }
-      },
-      "part_11_wheel": {
-        "name": "Captain's Wheel",
-        "description": "Connects to the rudder for precise steering.",
-        "dependency": "part_03_deck",
-        "recipe": {
-          "mat_log": 3,
-          "mat_iron": 2,
-          "mat_nail": 15
-        }
-      },
-      "part_12_compass": {
-        "name": "Golden Compass",
-        "description": "The final piece needed to navigate to the Leaders Island.",
-        "dependency": "part_11_wheel",
-        "recipe": {
-          "mat_iron": 2,
-          "mat_glass": 3
-        }
-      }
+      "part_01_keel": { "name": "The Keel", "description": "The backbone of the ship.", "recipe": {"mat_log": 12, "mat_iron": 6, "mat_screw": 60}, "dependency": null },
+      "part_02_hull": { "name": "The Hull", "description": "The watertight body.", "recipe": {"mat_plank": 24, "mat_tar": 12, "mat_nail": 60, "mat_screw": 60}, "dependency": "part_01_keel" },
+      "part_03_deck": { "name": "The Deck", "description": "The top floor.", "recipe": {"mat_plank": 30, "mat_nail": 48, "mat_tar": 12}, "dependency": "part_02_hull" },
+      "part_04_mast": { "name": "Main Mast", "description": "Holds the sails.", "recipe": {"mat_log": 6, "mat_iron": 4, "mat_rope": 12}, "dependency": "part_03_deck" },
+      "part_05_rigging": { "name": "Rigging", "description": "Ropes and pulleys.", "recipe": {"mat_rope": 35, "mat_iron": 6}, "dependency": "part_04_mast" },
+      "part_06_sails": { "name": "Canvas Sails", "description": "Catches the wind.", "recipe": {"mat_canvas": 18, "mat_rope": 12, "mat_nail": 25}, "dependency": "part_05_rigging" },
+      "part_07_rudder": { "name": "The Rudder", "description": "Steers the ship.", "recipe": {"mat_log": 4, "mat_iron": 3, "mat_screw": 12}, "dependency": "part_02_hull" },
+      "part_08_anchor": { "name": "Heavy Anchor", "description": "Keeps the ship steady.", "recipe": {"mat_iron": 12, "mat_rope": 6}, "dependency": "part_02_hull" },
+      "part_09_crows_nest": { "name": "Crow's Nest", "description": "Lookout tower.", "recipe": {"mat_plank": 6, "mat_glass": 3, "mat_screw": 25}, "dependency": "part_04_mast" },
+      "part_10_cannons": { "name": "Cannons", "description": "Defensive artillery.", "recipe": {"mat_iron": 14, "mat_log": 6}, "dependency": "part_03_deck" },
+      "part_11_wheel": { "name": "Ship's Wheel", "description": "Controls the rudder.", "recipe": {"mat_log": 3, "mat_iron": 2, "mat_nail": 15}, "dependency": "part_03_deck" },
+      "part_12_compass": { "name": "Magnetic Compass", "description": "Points the way home.", "recipe": {"mat_iron": 2, "mat_glass": 3}, "dependency": "part_11_wheel" }
+    },
+    "tacticalItems": {
+      "atk_termite": { "name": "Termite Sabotage", "type": "attack", "costTokens": 200, "costMats": {"mat_log": 2, "mat_screw": 10} },
+      "atk_gunpowder": { "name": "Gunpowder Barrel", "type": "attack", "costTokens": 400, "costMats": {"mat_iron": 1, "mat_tar": 3} },
+      "atk_pirate": { "name": "Pirate Attack", "type": "attack", "costTokens": 600, "costMats": {"mat_canvas": 2, "mat_rope": 4} },
+      "def_guard_dog": { "name": "Guard Dog", "type": "defense", "costTokens": 300, "costMats": {"mat_plank": 3} },
+      "def_honor": { "name": "Scout's Honor Treaty", "type": "defense", "costTokens": 800, "costMats": {"mat_glass": 1, "mat_rope": 5} }
     }
   }
 }

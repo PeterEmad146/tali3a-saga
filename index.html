@@ -2,20 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scout Island Survival</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tali3a Saga — Scout Island Survival</title>
+    <meta name="description" content="Tali3a Saga: A naval MMO-lite adventure for scouts. Build ships, trade resources, and conquer the seas.">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div id="globalLoader"><div class="spinner"></div><p id="loaderText">Accessing Fleet...</p></div>
+
+    <!-- Animated Ocean Waves -->
+    <div class="ocean-waves">
+        <div class="wave wave-1"></div>
+        <div class="wave wave-2"></div>
+        <div class="wave wave-3"></div>
+    </div>
+
+    <!-- Floating Bubbles -->
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <!-- Login Screen -->
     <div class="login-container">
-        <h1>Scout Island</h1>
-        <p>Enter your secret passcode to set sail.</p>
-        
-        <input type="text" id="passcodeInput" placeholder="Enter Passcode..." autocomplete="off">
-        <button id="loginBtn">Set Sail</button>
-        
-        <!-- This paragraph will display errors if the passcode is wrong -->
-        <p id="errorMessage" style="color: red; display: none;"></p>
+        <h1>⚓ Tali3a Saga</h1>
+        <p class="login-subtitle">Navigate the Seas. Build Your Fleet. Conquer the Islands.</p>
+
+        <div class="login-card">
+            <h2>🏴‍☠️ Captain's Log-In</h2>
+            <p>Enter your secret passcode to set sail.</p>
+            
+            <input type="text" id="passcodeInput" placeholder="⚔ Enter Passcode..." autocomplete="off">
+            <button id="loginBtn">⚓ Set Sail</button>
+            
+            <!-- This paragraph will display errors if the passcode is wrong -->
+            <p id="errorMessage" style="color: red; display: none;"></p>
+        </div>
     </div>
 
     <!-- Link the logic script at the bottom so it loads after the UI -->
