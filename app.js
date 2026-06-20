@@ -157,6 +157,7 @@ if (trackerForm) {
     const user = JSON.parse(localStorage.getItem("scoutUser"));
     const today = new Date().toISOString().split('T')[0];
     dateInput.max = today;
+    dateInput.min = "2026-06-20";
 
     // REAL-TIME UI BLOCKER: Listen for when the user picks a date
     dateInput.addEventListener("change", function() {
