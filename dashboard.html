@@ -234,6 +234,22 @@
 
     </main>
 
+    <div id="tacticalModal" class="modal-overlay">
+        <div class="modal-content card" style="max-width: 400px; text-align: center; border: 3px solid #1b263b;">
+            <span class="close-modal" onclick="closeTacticalModal()">✖</span>
+            <h2 id="modalTitle" style="color: #c0392b; margin-top: 0;">Item Name</h2>
+            <img id="modalIcon" src="" class="item-icon" style="margin: 10px auto; width: 80px; height: 80px;" onerror="this.style.display='none'">
+            <p id="modalType" style="font-weight: bold; text-transform: uppercase; letter-spacing: 1px;"></p>
+            
+            <div style="background: rgba(0,0,0,0.05); padding: 15px; border-radius: 5px; margin-bottom: 15px; text-align: left; border-left: 4px solid #c0392b;">
+                <p style="margin: 0; font-size: 14px;"><strong>⚔️ Action:</strong> <span id="modalDesc"></span></p>
+            </div>
+            
+            <div style="background: #fff3cd; padding: 15px; border-radius: 5px; text-align: left; border-left: 4px solid #f1c40f;">
+                <p style="margin: 0; font-size: 14px; color: #856404;"><strong>💡 Captain's Hint:</strong> <span id="modalHint"></span></p>
+            </div>
+        </div>
+    </div>
 
 
     <script src="app.js"></script>

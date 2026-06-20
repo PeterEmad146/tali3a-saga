@@ -1,5 +1,7 @@
 // paste your exact Google Web App deployment URL here:
 const API_URL = "https://script.google.com/macros/s/AKfycbzzT26fDQZLHo-dFfNqrmVxVBBUHm-DoScUAkEObBS3SNsO0x7SjVA44TZtJeWS-oBSAw/exec"; 
+let globalTacticalItems = {}; // Stores tactical data for the popup
+
 
 // --- LOGIN LOGIC ---
 const loginBtn = document.getElementById("loginBtn");
@@ -483,6 +485,7 @@ function initTacticalUI() {
     fetch("gameData.json")
         .then(res => res.json())
         .then(config => {
+            globalTacticalItems = config.gameEconomy.tacticalItems; // <-- ADD THIS LINE
             renderBlackMarket(config.gameEconomy.tacticalItems, config.gameEconomy.rawMaterials, teamData);
             renderTacticalMap(config.gameEconomy.tacticalItems, teamData, user);
             renderNotifications(teamData.notifications);
@@ -512,6 +515,9 @@ function renderBlackMarket(tacticalItems, rawMaterials, teamData) {
             ? `<button onclick="buyTacticalItem('${key}')" style="background-color: purple; color: white; border: none; padding: 8px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: bold;">Buy ${item.name}</button>`
             : `<button disabled style="background-color: gray; color: white; border: none; padding: 8px; width: 100%; border-radius: 4px;">Cannot Afford</button>`;
 
+        // NEW: The Intel Button
+        const infoBtn = `<button onclick="showTacticalInfo('${key}')" style="background-color: #2980b9; color: white; border: none; padding: 8px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 8px;">ℹ️ Strategic Intel</button>`;
+
         const card = document.createElement("div");
         card.style = "border: 1px solid #ccc; padding: 10px; border-radius: 5px; background-color: #f9f9f9;";
         card.innerHTML = `
@@ -524,7 +530,7 @@ function renderBlackMarket(tacticalItems, rawMaterials, teamData) {
             <div style="background: white; border: 1px solid #eee; padding: 5px; border-radius: 5px; margin-bottom: 10px;">
                 ${reqHtml}
             </div>
-            ${btnHtml}
+            ${infoBtn} ${btnHtml}
         `;
         container.appendChild(card);
     }
@@ -919,4 +925,31 @@ function showLoading(text) {
 }
 function hideLoading() {
     document.getElementById("globalLoader").classList.remove("active");
+}
+
+function showTacticalInfo(key) {
+    const item = globalTacticalItems[key];
+    if (!item) return;
+
+    document.getElementById("modalTitle").innerText = item.name;
+    document.getElementById("modalIcon").src = `assets/${key}.png`;
+    
+    const typeEl = document.getElementById("modalType");
+    if (item.type === "attack") {
+        typeEl.innerText = "🧨 Offensive Weapon";
+        typeEl.style.color = "#c0392b";
+    } else {
+        typeEl.innerText = "🛡️ Defensive Shield";
+        typeEl.style.color = "#27ae60";
+    }
+
+    // Use fallback text just in case you forgot to add it to JSON
+    document.getElementById("modalDesc").innerText = item.description || "Classified military asset.";
+    document.getElementById("modalHint").innerText = item.hint || "Use strategically against rival Islands.";
+
+    document.getElementById("tacticalModal").classList.add("active");
+}
+
+function closeTacticalModal() {
+    document.getElementById("tacticalModal").classList.remove("active");
 }

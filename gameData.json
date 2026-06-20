@@ -26,12 +26,47 @@
       "part_11_wheel": { "name": "Ship's Wheel", "description": "Controls the rudder.", "recipe": {"mat_log": 3, "mat_iron": 2, "mat_nail": 15}, "dependency": "part_03_deck" },
       "part_12_compass": { "name": "Magnetic Compass", "description": "Points the way home.", "recipe": {"mat_iron": 2, "mat_glass": 3}, "dependency": "part_11_wheel" }
     },
-    "tacticalItems": {
-      "atk_termite": { "name": "Termite Sabotage", "type": "attack", "costTokens": 200, "costMats": {"mat_log": 2, "mat_screw": 10} },
-      "atk_gunpowder": { "name": "Gunpowder Barrel", "type": "attack", "costTokens": 400, "costMats": {"mat_iron": 1, "mat_tar": 3} },
-      "atk_pirate": { "name": "Pirate Attack", "type": "attack", "costTokens": 600, "costMats": {"mat_canvas": 2, "mat_rope": 4} },
-      "def_guard_dog": { "name": "Guard Dog", "type": "defense", "costTokens": 300, "costMats": {"mat_plank": 3} },
-      "def_honor": { "name": "Scout's Honor Treaty", "type": "defense", "costTokens": 800, "costMats": {"mat_glass": 1, "mat_rope": 5} }
+"tacticalItems": {
+      "atk_termite": { 
+        "name": "Termite Sabotage", 
+        "type": "attack", 
+        "costTokens": 200, 
+        "costMats": { "mat_log": 2, "mat_screw": 10 },
+        "description": "Releases a swarm of wood-eating termites onto an enemy Island's shipyard under the cover of darkness.",
+        "hint": "Highly effective against early-game ships. Use this to damage enemy Wooden Hulls, Masts, or Decks before they upgrade to heavy metal!"
+      },
+      "atk_gunpowder": { 
+        "name": "Gunpowder Barrel", 
+        "type": "attack", 
+        "costTokens": 500, 
+        "costMats": { "mat_tar": 3, "mat_iron": 5, "mat_rope": 2 },
+        "description": "A highly explosive, unstable barrel smuggled directly into the enemy's port.",
+        "hint": "Causes massive structural damage. Best used against late-game ships to blow up heavy parts like Cannons, Anchors, or the Ship's Wheel."
+      },
+      "atk_pirate": { 
+        "name": "Pirate Mercenaries", 
+        "type": "attack", 
+        "costTokens": 800, 
+        "costMats": { "mat_iron": 10, "mat_canvas": 2, "mat_rope": 5 },
+        "description": "Hires a ruthless crew of rogue pirates to raid an enemy Island and plunder their warehouses.",
+        "hint": "Does not damage the enemy ship, but completely bypasses Shipyard defenses to steal their raw materials! Target wealthy Islands that are hoarding resources."
+      },
+      "def_guard_dog": {
+        "name": "Guard Dog",
+        "type": "defense",
+        "costTokens": 150,
+        "costMats": { "mat_tar": 1 },
+        "description": "A loyal hound that patrols your shipyard day and night, barking at the first sign of intruders.",
+        "hint": "Activates a 7-day shield specifically blocking Sabotage attacks (like Termites and Pirate Mercenaries). Cannot block heavy explosive Cannon or Gunpowder fire!"
+      },
+      "def_honor": {
+        "name": "Shield of Honor",
+        "type": "defense",
+        "costTokens": 600,
+        "costMats": { "mat_iron": 8, "mat_glass": 2, "mat_plank": 10 },
+        "description": "An impenetrable naval blockade formed by elite scout vessels surrounding your Island's borders.",
+        "hint": "The ultimate defense. Grants complete immunity from ALL attacks (including Gunpowder) for 7 days. Buy this immediately if you are in 1st place on the Leaderboard to protect your lead!"
+      }
     }
   }
 }
